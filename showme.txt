@@ -1,0 +1,5 @@
+File names:
+
+FPC.m: the matlab file for the implementation of FPC
+FPC_UCI_demo_musk2.m: a demo of FPC for UCI data set
+clean2.mat: data file
