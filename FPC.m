@@ -35,7 +35,11 @@ ATest = PolynomialKerMat(xte,cx,s); % the associated matrix via polynomial kerne
 [m,n]=size(ATrain);
 
 % calculate the inverse and restore
-tempA = (gamma*(ATrain'*ATrain)+alpha*eye(n))\eye(n);
+% tempA = (gamma*(ATrain'*ATrain)+alpha*eye(n))\eye(n);
+% some faster ways for implementation
+tempA = decomposition(gamma*(ATrain'*ATrain)+alpha*eye(n)); % way 1
+% or by cholesky
+% tempA = decomposition(gamma*(ATrain'*ATrain)+alpha*eye(n),'chol'); % way 2
 
 % initialization
 u0=zeros(n,1);
@@ -44,7 +48,8 @@ w0=zeros(m,1);
 
 iter = 1;
 while iter<=MaxIter
-    ut = tempA*(alpha*u0+ATrain'*(gamma*v0-w0)); % update ut
+%     ut = tempA*(alpha*u0+ATrain'*(gamma*v0-w0)); % update ut via original way
+    ut = tempA\(alpha*u0+ATrain'*(gamma*v0-w0)); % update ut via faster way
     vt = hinge_prox(ytr,ATrain*ut+gamma^(-1)*w0,m*gamma); % update vt
     wt = w0+gamma*(ATrain*ut-vt); % update multiplier wt
     
